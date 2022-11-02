@@ -71,8 +71,6 @@ export class App extends Component {
       name.toLowerCase().includes(normalizedFilter)
     );
 
-    console.log(filteredContacts.length);
-
     return (
       <Box
         display="flex"
