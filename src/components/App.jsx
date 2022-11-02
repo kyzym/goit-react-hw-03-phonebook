@@ -9,6 +9,7 @@ import {
   Filter,
   Title,
   SubTitle,
+  ContactsNotification,
 } from './AppComponentsMap';
 import initialContacts from './data/contacts.json';
 
@@ -55,7 +56,9 @@ export class App extends Component {
   };
 
   changeFilter = e => {
-    this.setState({ filter: e.target.value });
+    const { value } = e.target;
+
+    this.setState({ filter: value });
   };
 
   render() {
@@ -67,6 +70,8 @@ export class App extends Component {
     const filteredContacts = contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
+
+    console.log(filteredContacts.length);
 
     return (
       <Box
@@ -91,10 +96,10 @@ export class App extends Component {
           contacts={filteredContacts}
           onDeleteContact={deleteContact}
         />
-
-        <div>
-          <span>Total number of contacts: {contacts.length}</span>
-        </div>
+        <ContactsNotification
+          filtered={filteredContacts.length}
+          contacts={contacts.length}
+        />
       </Box>
     );
   }
