@@ -2,12 +2,17 @@ import { Component } from 'react';
 import { nanoid } from 'nanoid';
 import { Notify } from 'notiflix/build/notiflix-notify-aio';
 import { Box } from './utils/Box.styled';
-import initialContacts from './data/contacts.json';
 import { FcContacts, FcList } from 'react-icons/fc';
-import { Form } from './ContactsForm/ContactsForm';
-import { ContactsList } from './ContactList/ContactsList';
-import { Filter } from './Filter/Filter';
-import { Title, SubTitle } from './ContactsForm/ContactForm.styled';
+import {
+  Form,
+  ContactsList,
+  Filter,
+  Title,
+  SubTitle,
+} from './AppComponentsMap';
+import initialContacts from './data/contacts.json';
+
+const LS_KEY = 'savedContacts';
 
 export class App extends Component {
   state = {
@@ -16,19 +21,16 @@ export class App extends Component {
   };
 
   componentDidMount() {
-    const parsedContacts = JSON.parse(localStorage.getItem('savedContacts'));
+    const savedContacts = JSON.parse(localStorage.getItem(LS_KEY));
 
-    if (parsedContacts) {
-      this.setState({ contacts: parsedContacts });
+    if (savedContacts) {
+      this.setState({ contacts: savedContacts });
     }
   }
 
-  componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(_, prevState) {
     if (this.state.contacts !== prevState.contacts) {
-      localStorage.setItem(
-        'savedContacts',
-        JSON.stringify(this.state.contacts)
-      );
+      localStorage.setItem(LS_KEY, JSON.stringify(this.state.contacts));
     }
   }
 
@@ -61,6 +63,7 @@ export class App extends Component {
     const { deleteContact, addContact, changeFilter } = this;
 
     const normalizedFilter = filter.toLowerCase().trim();
+
     const filteredContacts = contacts.filter(({ name }) =>
       name.toLowerCase().includes(normalizedFilter)
     );
